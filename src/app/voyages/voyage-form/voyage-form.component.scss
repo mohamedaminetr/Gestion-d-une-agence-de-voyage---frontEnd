@@ -1,0 +1,40 @@
+.form-container {
+  max-width: 800px;
+  margin: 0 auto;
+
+  .back-btn {
+    margin-bottom: 16px;
+  }
+}
+
+mat-card-header {
+  margin-bottom: 24px;
+}
+
+.voyage-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  
+  .half-width {
+    flex: 1;
+    min-width: 250px;
+  }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 16px;
+}

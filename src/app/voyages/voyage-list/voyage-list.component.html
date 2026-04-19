@@ -1,0 +1,145 @@
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Nos Voyages</h1>
+    <p class="page-subtitle">
+      {{ voyageService.filteredVoyages().length }} voyage(s) disponible(s)
+    </p>
+  </div>
+  <button mat-raised-button color="primary" routerLink="/voyages/new" class="add-btn">
+    <mat-icon>add</mat-icon> Ajouter un Voyage
+  </button>
+</div>
+
+<mat-card class="filter-card">
+  <mat-card-content class="filter-controls">
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Rechercher</mat-label>
+      <input matInput (input)="onSearch($event)" placeholder="Titre ou description" />
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Filtrer par Destination</mat-label>
+      <mat-select (selectionChange)="onFilterDestination($event.value)">
+        <mat-option value="">Toutes</mat-option>
+        @for (dest of destinationService.destinations(); track dest._id) {
+          <mat-option [value]="dest._id">{{ dest.nom }} ({{ dest.pays }})</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Date de départ</mat-label>
+      <input matInput [matDatepicker]="picker" (dateChange)="onFilterDate($event)" />
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <div class="view-toggle">
+      <button [class.active]="viewMode === 'table'" (click)="viewMode = 'table'">☰</button>
+      <button [class.active]="viewMode === 'grid'" (click)="viewMode = 'grid'">⊞</button>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+@if (voyageService.isLoading()) {
+  <div class="state-box">
+    <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
+    <p>Chargement...</p>
+  </div>
+}
+
+@if (
+  !voyageService.isLoading() && voyageService.filteredVoyages().length > 0 && viewMode === 'table'
+) {
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Titre</th>
+          <th>Destination</th>
+          <th>Départ</th>
+          <th>Prix</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (v of voyageService.filteredVoyages(); track v._id) {
+          <tr class="table-row">
+            <td class="cell-title">{{ v.titre }}</td>
+            <td class="cell-muted">{{ getDestinationName(v.destination) }}</td>
+            <td class="cell-muted">{{ v.dateDepart | date: 'dd/MM/yyyy' }}</td>
+            <td class="cell-price">{{ v.prix | currency: 'EUR' }}</td>
+            <td class="action-cells">
+              <button
+                mat-icon-button
+                color="accent"
+                (click)="viewDetail(v._id!)"
+                matTooltip="Détails"
+              >
+                <mat-icon>visibility</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="editVoyage(v._id!)"
+                matTooltip="Modifier"
+              >
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                color="warn"
+                (click)="deleteVoyage(v._id!)"
+                matTooltip="Supprimer"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
+
+@if (
+  !voyageService.isLoading() && voyageService.filteredVoyages().length > 0 && viewMode === 'grid'
+) {
+  <div class="card-grid">
+    @for (v of voyageService.filteredVoyages(); track v._id) {
+      <mat-card class="voyage-card">
+        <div class="card-img-wrap">
+          @if (getDestinationImage(v.destination)) {
+            <img class="card-img" [src]="getDestinationImage(v.destination)" [alt]="v.titre" />
+          }
+          <div class="card-img-overlay"></div>
+          <div class="card-img-info">
+            <span class="card-dest">📍 {{ getDestinationName(v.destination) }}</span>
+            <span class="card-price">{{ v.prix | currency: 'EUR' : 'symbol' : '1.0-0' }}</span>
+          </div>
+        </div>
+        <mat-card-content class="card-body">
+          <h3 class="card-title">{{ v.titre }}</h3>
+          <p class="card-desc">{{ v.description }}</p>
+          <span class="card-date">🗓 {{ v.dateDepart | date: 'dd/MM/yyyy' }}</span>
+        </mat-card-content>
+        <mat-card-actions class="card-actions">
+          <button mat-stroked-button (click)="viewDetail(v._id!)">Détails</button>
+          <button mat-stroked-button color="primary" (click)="editVoyage(v._id!)">Modifier</button>
+          <button mat-icon-button color="warn" (click)="deleteVoyage(v._id!)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    }
+  </div>
+}
+
+@if (!voyageService.isLoading() && voyageService.filteredVoyages().length === 0) {
+  <div class="state-box">
+    <span class="empty-icon">✈️</span>
+    <p class="empty-title">Aucun voyage trouvé</p>
+    <p class="empty-sub">Essayez de modifier vos filtres</p>
+  </div>
+}

@@ -1,0 +1,101 @@
+<div class="detail-container">
+  <button mat-button color="primary" class="back-btn" (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon> Retour aux voyages
+  </button>
+
+  @if (isLoading()) {
+    <div class="loader">
+      <mat-progress-spinner mode="indeterminate" diameter="50"></mat-progress-spinner>
+      <p>Chargement des détails de votre évasion...</p>
+    </div>
+  }
+
+  @if (!isLoading() && voyage()) {
+    <mat-card class="detail-card">
+      <mat-card-header>
+        <mat-card-title>{{ voyage()?.titre }}</mat-card-title>
+        @if (destinationObj()) {
+          <mat-card-subtitle>
+            Destination : {{ destinationObj()?.nom }} ({{ destinationObj()?.pays }})
+          </mat-card-subtitle>
+        }
+      </mat-card-header>
+
+      @if (destinationObj()?.image) {
+        <img mat-card-image [src]="destinationObj()?.image" alt="Destination Image"
+             onerror="this.src='https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1000'"/>
+      }
+
+      <mat-card-content class="content-body">
+        <div class="info-grid">
+          <div class="info-item">
+            <mat-icon color="primary">attach_money</mat-icon>
+            <div class="text">
+              <strong>Prix</strong>
+              <span>{{ voyage()?.prix | currency:'EUR' }}</span>
+            </div>
+          </div>
+          
+          <div class="info-item">
+            <mat-icon color="primary">event</mat-icon>
+            <div class="text">
+              <strong>Départ</strong>
+              <span>{{ voyage()?.dateDepart | date:'dd/MM/yyyy' }}</span>
+            </div>
+          </div>
+
+          @if (voyage()?.dateRetour) {
+            <div class="info-item">
+              <mat-icon color="primary">event_available</mat-icon>
+                <div class="text">
+                <strong>Retour</strong>
+                <span>{{ voyage()?.dateRetour | date:'dd/MM/yyyy' }}</span>
+              </div>
+            </div>
+          }
+
+          <div class="info-item">
+            <mat-icon color="primary">schedule</mat-icon>
+            <div class="text">
+              <strong>Durée</strong>
+              <span>{{ voyage()?.duree }} Jours</span>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <mat-icon color="primary">group</mat-icon>
+            <div class="text">
+              <strong>Places restantes</strong>
+              <span>{{ voyage()?.placesDisponibles }}</span>
+            </div>
+          </div>
+          
+          @if (destinationObj()?.climate) {
+            <div class="info-item">
+              <mat-icon color="primary">thermostat</mat-icon>
+              <div class="text">
+                <strong>Climat</strong>
+                <span style="text-transform: capitalize;">{{ destinationObj()?.climate }}</span>
+              </div>
+            </div>
+          }
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="description-section">
+          <h3>Description du voyage</h3>
+          <p>{{ voyage()?.description || 'Aucune description disponible pour ce voyage.' }}</p>
+        </div>
+
+        @if (destinationObj()?.description) {
+          <div class="description-section">
+            <h3>À propos de la destination</h3>
+            <p>{{ destinationObj()?.description }}</p>
+          </div>
+        }
+      </mat-card-content>
+    </mat-card>
+  }
+</div>
+

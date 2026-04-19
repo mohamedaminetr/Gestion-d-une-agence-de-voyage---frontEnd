@@ -1,0 +1,72 @@
+<div class="core-container">
+  <!-- Navbar -->
+  <header class="main-toolbar">
+    <div class="toolbar-inner">
+      <!-- Logo -->
+      <div class="brand" (click)="navigateTo('voyages')">
+        <div class="brand-icon">✦</div>
+        <div class="brand-text">
+          <span class="brand-title">Agence de Voyage</span>
+          <span class="brand-sub">Luxury Travel</span>
+        </div>
+      </div>
+
+      <!-- Desktop nav -->
+      <nav class="desktop-nav">
+        <button
+          class="nav-btn"
+          [class.active]="activeRoute === 'voyages'"
+          (click)="navigateTo('voyages')"
+        >
+          ✈ Voyages
+        </button>
+        <button
+          class="nav-btn"
+          [class.active]="activeRoute === 'destinations'"
+          (click)="navigateTo('destinations')"
+        >
+          📍 Destinations
+        </button>
+      </nav>
+
+      <!-- Mobile hamburger -->
+      <button class="hamburger" (click)="menuOpen = !menuOpen">
+        <span [class.open-top]="menuOpen"></span>
+        <span [class.open-mid]="menuOpen"></span>
+        <span [class.open-bot]="menuOpen"></span>
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    @if (menuOpen) {
+      <div class="mobile-menu">
+        <button
+          class="mobile-nav-btn"
+          [class.active]="activeRoute === 'voyages'"
+          (click)="navigateTo('voyages'); menuOpen = false"
+        >
+          ✈ Voyages
+        </button>
+        <button
+          class="mobile-nav-btn"
+          [class.active]="activeRoute === 'destinations'"
+          (click)="navigateTo('destinations'); menuOpen = false"
+        >
+          📍 Destinations
+        </button>
+      </div>
+    }
+  </header>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb-bar">
+    <span>Accueil</span>
+    <span class="sep">›</span>
+    <span class="crumb-active">{{ activeRoute | titlecase }}</span>
+  </div>
+
+  <!-- Router outlet -->
+  <main class="content-container">
+    <router-outlet />
+  </main>
+</div>

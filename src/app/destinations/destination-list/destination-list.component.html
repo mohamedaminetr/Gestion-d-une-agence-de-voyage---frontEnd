@@ -1,0 +1,59 @@
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Destinations</h1>
+    <p class="page-subtitle">
+      {{ destinationService.destinations().length }} destination(s) disponible(s)
+    </p>
+  </div>
+  <button mat-raised-button color="primary" routerLink="/destinations/new" class="add-btn">
+    <mat-icon>add</mat-icon> Nouvelle Destination
+  </button>
+</div>
+
+@if (destinationService.isLoading()) {
+  <div class="state-box">
+    <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
+    <p>Chargement...</p>
+  </div>
+} @else {
+  @if (destinationService.destinations().length > 0) {
+    <div class="card-grid">
+      @for (dest of destinationService.destinations(); track dest._id) {
+        <mat-card class="destination-card">
+          <div class="card-img-wrap">
+            @if (dest.image) {
+              <img class="card-img" [src]="dest.image" [alt]="dest.nom" />
+            }
+            <div class="card-img-overlay"></div>
+            <div class="card-img-info">
+              <span class="card-weather">☀️ Climat : {{ dest.climate }}</span>
+              <span class="card-pays">{{ dest.pays }}</span>
+            </div>
+          </div>
+
+          <mat-card-content class="card-body">
+            <h3 class="card-title">{{ dest.nom }}</h3>
+            <p class="card-desc">
+              {{ dest.description || 'Aucune description fournie pour cette destination unique.' }}
+            </p>
+          </mat-card-content>
+
+          <mat-card-actions class="card-actions">
+            <button mat-stroked-button color="primary" (click)="editDestination(dest._id)">
+              Modifier
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteDestination(dest._id)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      }
+    </div>
+  } @else {
+    <div class="state-box">
+      <span class="empty-icon">🌍</span>
+      <p class="empty-title">Aucune destination trouvée</p>
+      <p class="empty-sub">Commencez par ajouter une nouvelle destination dans votre catalogue.</p>
+    </div>
+  }
+}

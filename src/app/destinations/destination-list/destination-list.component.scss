@@ -1,0 +1,150 @@
+/* Header */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.page-title {
+  font-family: 'Cinzel', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 4px 0;
+}
+
+.page-subtitle {
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.4);
+  margin: 0;
+}
+
+.add-btn {
+  font-family: 'Cinzel', serif !important;
+  letter-spacing: 0.05em !important;
+  background-color: #1a1a2e !important;
+}
+
+/* Card grid */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.destination-card {
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+  }
+}
+
+.card-img-wrap {
+  height: 180px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #2d2d5e 100%);
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+
+  .card-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.card-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+}
+
+.card-img-info {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 12px 16px;
+}
+
+.card-weather {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.85);
+  text-transform: capitalize;
+}
+
+.card-pays {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #e8c87e;
+}
+
+.card-body {
+  padding: 16px !important;
+}
+
+.card-title {
+  font-family: 'Cinzel', serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin: 0 0 6px 0;
+}
+
+.card-desc {
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.5);
+  margin: 0 0 10px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.card-actions {
+  padding: 8px 12px 12px !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* States */
+.state-box {
+  text-align: center;
+  padding: 64px 24px;
+  background: white;
+  border-radius: 12px;
+  margin-top: 8px;
+
+  .empty-icon {
+    font-size: 48px;
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .empty-title {
+    font-family: 'Cinzel', serif;
+    font-size: 17px;
+    color: rgba(0, 0, 0, 0.5);
+    margin: 0 0 4px 0;
+  }
+
+  .empty-sub {
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.3);
+    margin: 0;
+  }
+}
