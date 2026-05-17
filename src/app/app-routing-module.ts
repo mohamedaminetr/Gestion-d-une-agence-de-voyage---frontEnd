@@ -14,6 +14,7 @@ const routes: Routes = [
     path: '',
     component: CoreComponent,
     children: [
+      { path: '', redirectTo: 'destinations', pathMatch: 'full' },
       { path: 'destinations', component: DestinationListComponent },
       { path: 'destinations/new', component: DestinationFormComponent },
       { path: 'destinations/:id', component: DestinationFormComponent },
@@ -24,7 +25,7 @@ const routes: Routes = [
     ],
   },
 
-  { path: '**', redirectTo: 'homepage' },
+  { path: '**', redirectTo: 'destinations' },
 ];
 
 @NgModule({
