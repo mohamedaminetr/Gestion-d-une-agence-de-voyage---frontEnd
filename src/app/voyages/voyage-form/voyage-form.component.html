@@ -5,7 +5,11 @@
   <mat-card>
     <mat-card-header>
       <mat-card-title>
-        @if (isEditMode) { Modifier le Voyage } @else { Nouveau Voyage }
+        @if (isEditMode) {
+          Modifier le Voyage
+        } @else {
+          Nouveau Voyage
+        }
       </mat-card-title>
     </mat-card-header>
 
@@ -13,7 +17,7 @@
       <form (submit)="onSubmit($event)" class="voyage-form">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Titre du voyage</mat-label>
-          <input matInput [formField]="voyageForm.titre" placeholder="Ex: Découverte de Bali">
+          <input matInput [formField]="voyageForm.titre" placeholder="Ex: Découverte de Bali" />
           @if (voyageForm.titre().invalid() && voyageForm.titre().touched()) {
             <mat-error>
               @for (error of voyageForm.titre().errors(); track error.kind) {
@@ -27,9 +31,7 @@
           <mat-label>Destination associée</mat-label>
           <mat-select [formField]="voyageForm.destination">
             @for (d of destinationService.destinations(); track d._id) {
-              <mat-option [value]="d._id">
-                {{ d.nom }} ({{ d.pays }})
-              </mat-option>
+              <mat-option [value]="d._id"> {{ d.nom }} ({{ d.pays }}) </mat-option>
             }
           </mat-select>
           @if (voyageForm.destination().invalid() && voyageForm.destination().touched()) {
@@ -40,7 +42,7 @@
         <div class="form-row">
           <mat-form-field appearance="outline" class="half-width">
             <mat-label>Prix (€)</mat-label>
-            <input matInput type="number" [formField]="voyageForm.prix">
+            <input matInput type="number" [formField]="voyageForm.prix" />
             @if (voyageForm.prix().invalid() && voyageForm.prix().touched()) {
               <mat-error>
                 @for (error of voyageForm.prix().errors(); track error.kind) {
@@ -52,21 +54,21 @@
 
           <mat-form-field appearance="outline" class="half-width">
             <mat-label>Durée (jours)</mat-label>
-            <input matInput type="number" [formField]="voyageForm.duree">
+            <input matInput type="number" [value]="voyageModel().duree" readonly />
           </mat-form-field>
         </div>
 
         <div class="form-row">
           <mat-form-field appearance="outline" class="half-width">
             <mat-label>Date de Départ</mat-label>
-            <input matInput [matDatepicker]="departPicker" [formField]="voyageForm.dateDepart">
+            <input matInput [matDatepicker]="departPicker" [formField]="voyageForm.dateDepart" />
             <mat-datepicker-toggle matIconSuffix [for]="departPicker"></mat-datepicker-toggle>
             <mat-datepicker #departPicker></mat-datepicker>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="half-width">
             <mat-label>Date de Retour (optionnelle)</mat-label>
-            <input matInput [matDatepicker]="retourPicker" [formField]="voyageForm.dateRetour">
+            <input matInput [matDatepicker]="retourPicker" [formField]="voyageForm.dateRetour" />
             <mat-datepicker-toggle matIconSuffix [for]="retourPicker"></mat-datepicker-toggle>
             <mat-datepicker #retourPicker></mat-datepicker>
           </mat-form-field>
@@ -74,7 +76,7 @@
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Places disponibles</mat-label>
-          <input matInput type="number" [formField]="voyageForm.placesDisponibles">
+          <input matInput type="number" [formField]="voyageForm.placesDisponibles" />
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
@@ -84,8 +86,17 @@
 
         <div class="form-actions">
           <button mat-button type="button" (click)="cancel()">Annuler</button>
-          <button mat-raised-button color="primary" type="submit" [disabled]="voyageForm().invalid() || isSubmitting()">
-            @if (isEditMode) { Enregistrer } @else { Créer }
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="voyageForm().invalid() || isSubmitting()"
+          >
+            @if (isEditMode) {
+              Enregistrer
+            } @else {
+              Créer
+            }
           </button>
         </div>
       </form>

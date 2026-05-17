@@ -16,16 +16,16 @@ import { DestinationService } from '../../services/destination.service';
   selector: 'app-voyage-detail',
   standalone: true,
   imports: [
-    CommonModule, 
-    RouterModule, 
-    MatCardModule, 
-    MatButtonModule, 
-    MatIconModule, 
+    CommonModule,
+    RouterModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
     MatDividerModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   templateUrl: './voyage-detail.component.html',
-  styleUrls: ['./voyage-detail.component.scss']
+  styleUrls: ['./voyage-detail.component.scss'],
 })
 export class VoyageDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
@@ -42,21 +42,19 @@ export class VoyageDetailComponent implements OnInit {
     const v = this.voyage();
     if (!v || !v.destination) return null;
     if (typeof v.destination === 'object') return v.destination as unknown as Destination;
-    
+
     // Fallback: Find it from the destination store
-    return this.destinationService.destinations().find(d => d._id === v.destination) || null;
+    return this.destinationService.destinations().find((d) => d._id === v.destination) || null;
   });
 
   async ngOnInit() {
     this.destinationService.loadDestinations();
     const id = this.route.snapshot.paramMap.get('id');
-    
+
     if (id) {
       try {
-        console.log('Loading voyage details for ID:', id);
         const data = await this.voyageService.getVoyage(id);
         this.voyage.set(data);
-        console.log('Voyage data loaded successfully:', data);
       } catch (err) {
         console.error('Error loading voyage details:', err);
         this.notification.error('Impossible de charger les détails du voyage.');

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -19,13 +19,35 @@ import { Voyage } from '../../models/voyage';
   selector: 'app-voyage-form',
   standalone: true,
   imports: [
-    CommonModule, RouterModule, MatCardModule, MatButtonModule, 
-    MatInputModule, MatSelectModule, MatDatepickerModule, MatIconModule, FormField
+    CommonModule,
+    RouterModule,
+    MatCardModule,
+    MatButtonModule,
+    MatInputModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatIconModule,
+    FormField,
   ],
   templateUrl: './voyage-form.component.html',
-  styleUrls: ['./voyage-form.component.scss']
+  styleUrls: ['./voyage-form.component.scss'],
 })
 export class VoyageFormComponent implements OnInit {
+  constructor() {
+    effect(() => {
+      const { dateDepart, dateRetour, duree } = this.voyageModel();
+      if (dateDepart && dateRetour) {
+        const msInDay = 1000 * 60 * 60 * 24;
+        const diff = Math.max(
+          0,
+          Math.round((dateRetour.getTime() - dateDepart.getTime()) / msInDay),
+        );
+        if (duree !== diff) {
+          this.voyageModel.update((v) => ({ ...v, duree: diff }));
+        }
+      }
+    });
+  }
   public isEditMode = false;
   private currentId: string | null = null;
   public isSubmitting = signal(false);
@@ -46,7 +68,7 @@ export class VoyageFormComponent implements OnInit {
     dateRetour: new Date(),
     placesDisponibles: 0,
     destination: '',
-    createdAt: new Date()
+    createdAt: new Date(),
   });
 
   public voyageForm = form(this.voyageModel, (fieldPath) => {
@@ -67,7 +89,7 @@ export class VoyageFormComponent implements OnInit {
       this.isEditMode = true;
       try {
         const voyage = await this.voyageService.getVoyage(this.currentId);
-        
+
         let destinationId = voyage.destination;
         if (typeof voyage.destination === 'object' && voyage.destination !== null) {
           destinationId = (voyage.destination as any)._id;
@@ -75,7 +97,7 @@ export class VoyageFormComponent implements OnInit {
 
         this.voyageModel.set({
           ...voyage,
-          destination: destinationId
+          destination: destinationId,
         });
       } catch (err) {
         this.notification.error('Impossible de charger le voyage');
@@ -96,11 +118,11 @@ export class VoyageFormComponent implements OnInit {
         titre: this.voyageForm.titre?.()?.value() || '',
         description: this.voyageForm.description?.()?.value() || '',
         prix: this.voyageForm.prix?.()?.value() || 0,
-        duree: this.voyageForm.duree?.()?.value() || 0,
+        duree: this.voyageModel().duree,
         dateDepart: this.voyageForm.dateDepart?.()?.value() || new Date(),
         dateRetour: this.voyageForm.dateRetour?.()?.value() || new Date(),
         placesDisponibles: this.voyageForm.placesDisponibles?.()?.value() || 0,
-        destination: this.voyageForm.destination?.()?.value() || ''
+        destination: this.voyageForm.destination?.()?.value() || '',
       } as unknown as Voyage;
 
       if (this.isEditMode && this.currentId) {
@@ -112,10 +134,16 @@ export class VoyageFormComponent implements OnInit {
       }
       this.router.navigate(['/voyages']);
     } catch (err) {
-      this.notification.error('Erreur lors de l\'enregistrement');
+      this.notification.error("Erreur lors de l'enregistrement");
     } finally {
       this.isSubmitting.set(false);
     }
+  }
+
+  private async calculateDuration(depart: Date, retour: Date): Promise<number> {
+    const msInDay = 1000 * 60 * 60 * 24;
+    const diff = Math.max(0, Math.round((retour.getTime() - depart.getTime()) / msInDay));
+    return diff;
   }
 
   public cancel(): void {
