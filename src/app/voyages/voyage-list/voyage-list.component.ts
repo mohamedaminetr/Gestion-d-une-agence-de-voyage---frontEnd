@@ -37,7 +37,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   ],
 })
 export class VoyageListComponent implements OnInit {
-  public viewMode: 'table' | 'grid' = 'table';
+  public viewMode: 'table' | 'grid' = 'grid';
   public voyageService = inject(VoyageService);
   public destinationService = inject(DestinationService);
   private notification = inject(NotificationService);

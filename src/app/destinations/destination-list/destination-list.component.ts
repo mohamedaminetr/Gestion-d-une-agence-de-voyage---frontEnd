@@ -8,6 +8,9 @@ import { DestinationService } from '../../services/destination.service';
 import { NotificationService } from '../../services/notification.service';
 import { Router } from '@angular/router';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-destination-list',
@@ -19,6 +22,9 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
     MatButtonModule,
     MatIconModule,
     MatProgressSpinner,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
   ],
   templateUrl: './destination-list.component.html',
   styleUrls: ['./destination-list.component.scss'],
@@ -30,6 +36,20 @@ export class DestinationListComponent implements OnInit {
 
   public ngOnInit(): void {
     this.destinationService.loadDestinations();
+  }
+
+  public onFilterNom(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    this.destinationService.filterNom.set(target.value);
+  }
+
+  public onFilterPays(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    this.destinationService.filterPays.set(target.value);
+  }
+
+  public onFilterClimat(climat: string): void {
+    this.destinationService.filterClimat.set(climat);
   }
 
   public editDestination(id: string): void {

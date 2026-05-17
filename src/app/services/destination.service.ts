@@ -16,6 +16,30 @@ export class DestinationService {
   public destinations = signal<Destination[]>([]);
   public isLoading = signal<boolean>(false);
 
+  // Filters
+  public filterNom = signal<string>('');
+  public filterPays = signal<string>('');
+  public filterClimat = signal<string>('');
+
+  public filteredDestinations = computed(() => {
+    let result = this.destinations();
+    const nom = this.filterNom().toLowerCase();
+    const pays = this.filterPays().toLowerCase();
+    const climat = this.filterClimat().toLowerCase();
+
+    if (nom) {
+      result = result.filter((d) => d.nom.toLowerCase().includes(nom));
+    }
+    if (pays) {
+      result = result.filter((d) => d.pays.toLowerCase().includes(pays));
+    }
+    if (climat) {
+      result = result.filter((d) => (d.climate || '').toLowerCase().includes(climat));
+    }
+
+    return result;
+  });
+
   constructor() {}
 
   async loadDestinations() {

@@ -10,37 +10,49 @@
   </button>
 </div>
 
-<mat-card class="filter-card">
-  <mat-card-content class="filter-controls">
-    <mat-form-field appearance="outline" class="filter-field">
-      <mat-label>Rechercher</mat-label>
-      <input matInput (input)="onSearch($event)" placeholder="Titre ou description" />
-      <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field>
+<div class="filter-section">
+  <div class="filter-container">
+    <div class="filter-group">
+      <div class="filter-icon-wrapper">
+        <mat-icon>tune</mat-icon>
+      </div>
 
-    <mat-form-field appearance="outline" class="filter-field">
-      <mat-label>Filtrer par Destination</mat-label>
-      <mat-select (selectionChange)="onFilterDestination($event.value)">
-        <mat-option value="">Toutes</mat-option>
-        @for (dest of destinationService.destinations(); track dest._id) {
-          <mat-option [value]="dest._id">{{ dest.nom }} ({{ dest.pays }})</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
+      <mat-form-field appearance="outline" class="premium-filter-field search-field">
+        <mat-label>Rechercher un voyage</mat-label>
+        <mat-icon matPrefix class="prefix-icon">search</mat-icon>
+        <input matInput (input)="onSearch($event)" placeholder="Titre, description..." />
+      </mat-form-field>
 
-    <mat-form-field appearance="outline" class="filter-field">
-      <mat-label>Date de départ</mat-label>
-      <input matInput [matDatepicker]="picker" (dateChange)="onFilterDate($event)" />
-      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
+      <mat-form-field appearance="outline" class="premium-filter-field">
+        <mat-label>Destination</mat-label>
+        <mat-icon matPrefix class="prefix-icon">place</mat-icon>
+        <mat-select (selectionChange)="onFilterDestination($event.value)">
+          <mat-option value="">Toutes les destinations</mat-option>
+          @for (dest of destinationService.destinations(); track dest._id) {
+            <mat-option [value]="dest._id">{{ dest.nom }} ({{ dest.pays }})</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
 
-    <div class="view-toggle">
-      <button [class.active]="viewMode === 'table'" (click)="viewMode = 'table'">☰</button>
-      <button [class.active]="viewMode === 'grid'" (click)="viewMode = 'grid'">⊞</button>
+      <mat-form-field appearance="outline" class="premium-filter-field">
+        <mat-label>Date de départ</mat-label>
+        <mat-icon matPrefix class="prefix-icon">event</mat-icon>
+        <input matInput [matDatepicker]="picker" (dateChange)="onFilterDate($event)" />
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
     </div>
-  </mat-card-content>
-</mat-card>
+
+    <div class="view-toggle-premium">
+      <button [class.active]="viewMode === 'grid'" (click)="viewMode = 'grid'" matTooltip="Vue Grille">
+        <mat-icon>grid_view</mat-icon>
+      </button>
+      <button [class.active]="viewMode === 'table'" (click)="viewMode = 'table'" matTooltip="Vue Liste">
+        <mat-icon>view_list</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
 
 @if (voyageService.isLoading()) {
   <div class="state-box">

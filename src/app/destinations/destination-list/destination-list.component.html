@@ -2,12 +2,47 @@
   <div>
     <h1 class="page-title">Destinations</h1>
     <p class="page-subtitle">
-      {{ destinationService.destinations().length }} destination(s) disponible(s)
+      {{ destinationService.filteredDestinations().length }} destination(s) disponible(s)
     </p>
   </div>
   <button mat-raised-button color="primary" routerLink="/destinations/new" class="add-btn">
     <mat-icon>add</mat-icon> Nouvelle Destination
   </button>
+</div>
+
+<div class="filter-section">
+  <div class="filter-container">
+    <div class="filter-group">
+      <div class="filter-icon-wrapper">
+        <mat-icon>tune</mat-icon>
+      </div>
+
+      <mat-form-field appearance="outline" class="premium-filter-field search-field">
+        <mat-label>Rechercher par nom</mat-label>
+        <mat-icon matPrefix class="prefix-icon">search</mat-icon>
+        <input matInput (input)="onFilterNom($event)" placeholder="Nom de la destination..." />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="premium-filter-field">
+        <mat-label>Pays</mat-label>
+        <mat-icon matPrefix class="prefix-icon">public</mat-icon>
+        <input matInput (input)="onFilterPays($event)" placeholder="Pays..." />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="premium-filter-field">
+        <mat-label>Climat</mat-label>
+        <mat-icon matPrefix class="prefix-icon">thermostat</mat-icon>
+        <mat-select (selectionChange)="onFilterClimat($event.value)">
+          <mat-option value="">Tous les climats</mat-option>
+          <mat-option value="Tropical">Tropical</mat-option>
+          <mat-option value="Tempéré">Tempéré</mat-option>
+          <mat-option value="Sec">Sec</mat-option>
+          <mat-option value="Polaire">Polaire</mat-option>
+          <mat-option value="Continental">Continental</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
 </div>
 
 @if (destinationService.isLoading()) {
@@ -16,9 +51,9 @@
     <p>Chargement...</p>
   </div>
 } @else {
-  @if (destinationService.destinations().length > 0) {
+  @if (destinationService.filteredDestinations().length > 0) {
     <div class="card-grid">
-      @for (dest of destinationService.destinations(); track dest._id) {
+      @for (dest of destinationService.filteredDestinations(); track dest._id) {
         <mat-card class="destination-card">
           <div class="card-img-wrap">
             @if (dest.image) {
